@@ -3,19 +3,19 @@ import os
 from slack_bolt import App
 from slack_bolt.oauth.oauth_settings import OAuthSettings
 
-# logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.DEBUG)
 
 app = App(
     signing_secret=os.environ.get("SLACK_SIGNING_SECRET"),
     token=os.environ.get("SLACK_BOT_TOKEN"),
 
     # OAuth
-    # oauth_settings=OAuthSettings(
-    #     client_id=os.environ.get("SLACK_CLIENT_ID"),
-    #     client_secret=os.environ.get("SLACK_CLIENT_SECRET"),
-    #     scopes=["app_mentions:read", "channels:history",
-    #             "im:history", "chat:write", "commands"],
-    # )
+    oauth_settings=OAuthSettings(
+        client_id=os.environ.get("SLACK_CLIENT_ID"),
+        client_secret=os.environ.get("SLACK_CLIENT_SECRET"),
+        scopes=["app_mentions:read", "channels:history",
+                "im:history", "chat:write", "commands"],
+    )
 )
 
 
@@ -118,7 +118,7 @@ def respond_to_button_click(action, ack, say, logger):
         logger.error(f"Error responding to 'first_button' button click: {e}")
 
 
-@app.shortcut("launch_simple_modal")
+@app.shortcut("click_shortcut")
 def open_modal(ack, shortcut, client, logger):
     """
     Shortcuts are invokable entry points to apps. Global shortcuts
