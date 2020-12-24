@@ -229,5 +229,15 @@ def slack_events():
     return handler.handle(request)
 
 
-if __name__ == "__main__":
-    app.start(3000)  # POST http://localhost:3000/slack/events
+@flask_app.route("/slack/install", methods=["GET"])
+def install():
+    return handler.handle(request)
+
+
+@flask_app.route("/slack/oauth_redirect", methods=["GET"])
+def oauth_redirect():
+    return handler.handle(request)
+
+
+# if __name__ == "__main__":
+#     app.start(3000)  # POST http://localhost:3000/slack/events
