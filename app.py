@@ -2,8 +2,11 @@ import logging
 import os
 from slack_bolt import App
 from slack_bolt.oauth.oauth_settings import OAuthSettings
+from slack_bolt.adapter.flask import SlackRequestHandler
+from flask import Flask, request
 
 logging.basicConfig(level=logging.DEBUG)
+
 
 app = App(
     signing_secret=os.environ.get("SLACK_SIGNING_SECRET"),
@@ -17,6 +20,9 @@ app = App(
                 "im:history", "chat:write", "commands"],
     )
 )
+
+flask_app = Flask(__name__)
+handler = SlackRequestHandler(app)
 
 
 @app.event("app_mention")
@@ -215,6 +221,12 @@ def publish_home_view(client, event, logger):
         )
     except Exception as e:
         logger.error(f"Error publishing view to Home Tab: {e}")
+
+
+@flask_app.route("/slack/events", methods=["POST"])
+def slack_events():
+    # handler runs App's dispatch method
+    return handler.handle(request)
 
 
 if __name__ == "__main__":
