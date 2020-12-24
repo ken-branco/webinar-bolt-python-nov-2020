@@ -21,6 +21,7 @@ app = App(
     )
 )
 
+app.oauth_flow.client.proxy = 'proxy.server:3128'
 flask_app = Flask(__name__)
 handler = SlackRequestHandler(app)
 
