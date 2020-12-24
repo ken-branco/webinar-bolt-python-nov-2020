@@ -223,6 +223,12 @@ def publish_home_view(client, event, logger):
         logger.error(f"Error publishing view to Home Tab: {e}")
 
 
+@app.middleware  # or app.use(log_request)
+def log_request(logger, body, next):
+    logger.debug(body)
+    return next()
+
+
 @flask_app.route("/slack/events", methods=["POST"])
 def slack_events():
     # handler runs App's dispatch method
